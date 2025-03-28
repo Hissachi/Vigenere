@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cifra de Vigenère Neon</title>
+        <link rel="stylesheet" href="/css/neon.css">
+        
+    </head>
+
+    <body>
+        <a href="index.html" class="back-button">Voltar</a>
+        <div class="glow-effect"></div>
+        <div class="container">
+            <h1>Cifra de Vigenère 🔐</h1>
+            <input type="text" id="mensagem" placeholder="Digite a mensagem">
+            <input type="text" id="chave" placeholder="Digite a chave">
+            <button class="btn encrypt" onclick="criptografar()">Criptografar</button>
+            <button class="btn decrypt" onclick="descriptografar()">Descriptografar</button>
+            <p id="resultado"></p>
+        </div>
+    </body>
+
+    <script>
+        const alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+        function vigenereEncrypt(mensagem, chave) {
+            let mensagemFinal = "";
+            mensagem = mensagem.toLowerCase();
+            chave = chave.toLowerCase();
+
+            for (let i = 0, j = 0; i < mensagem.length; i++) {
+                let index = alphabet.indexOf(mensagem[i]);
+
+                if (index !== -1) {
+                    let shift = alphabet.indexOf(chave[j % chave.length]); 
+                    let novoIndex = (index + shift) % alphabet.length;
+                    mensagemFinal += alphabet[novoIndex];
+                    j++;
+                } else {
+                    mensagemFinal += mensagem[i];
+                }
+            }
+            return mensagemFinal;
+        }
+
+        function vigenereDecrypt(mensagem, chave) {
+            let mensagemFinal = "";
+            mensagem = mensagem.toLowerCase();
+            chave = chave.toLowerCase();
+
+            for (let i = 0, j = 0; i < mensagem.length; i++) {
+                let index = alphabet.indexOf(mensagem[i]);
+
+                if (index !== -1) {
+                    let shift = alphabet.indexOf(chave[j % chave.length]); 
+                    let novoIndex = (index - shift + alphabet.length) % alphabet.length;
+                    mensagemFinal += alphabet[novoIndex];
+                    j++;
+                } else {
+                    mensagemFinal += mensagem[i];
+                }
+            }
+            return mensagemFinal;
+        }
+
+        function criptografar() {
+            let mensagem = document.getElementById("mensagem").value;
+            let chave = document.getElementById("chave").value;
+
+            if (mensagem === "" || chave === "") {
+                document.getElementById("resultado").innerText = "Preencha a mensagem e a chave!";
+                return;
+            }
+
+            let resultado = vigenereEncrypt(mensagem, chave);
+            document.getElementById("resultado").innerText = "🔒 Criptografado: " + resultado;
+        }
+
+        function descriptografar() {
+            let mensagem = document.getElementById("mensagem").value;
+            let chave = document.getElementById("chave").value;
+
+            if (mensagem === "" || chave === "") {
+                document.getElementById("resultado").innerText = "Preencha a mensagem e a chave!";
+                return;
+            }
+
+            let resultado = vigenereDecrypt(mensagem, chave);
+            document.getElementById("resultado").innerText = "🔓 Descriptografado: " + resultado;
+        }
+    </script>
+
+</html>
